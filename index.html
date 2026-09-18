@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cardiac Risk Screener</title>
+<style>
+  :root {
+    --ink: #12232e;
+    --ink-soft: #4a5b66;
+    --paper: #f7f9fa;
+    --panel: #ffffff;
+    --line: #dde3e6;
+    --teal: #0f4c5c;
+    --teal-deep: #0a3540;
+    --risk: #b3441e;
+    --risk-bg: #fbeee7;
+    --safe: #1f6f4a;
+    --safe-bg: #eaf5ef;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", "Inter", Arial, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  header {
+    background: var(--teal-deep);
+    color: #fff;
+    padding: 28px 24px;
+  }
+
+  header .wrap {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  header h1 {
+    margin: 0 0 6px 0;
+    font-size: 1.5rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+
+  header p {
+    margin: 0;
+    color: #cfe2e5;
+    font-size: 0.92rem;
+    max-width: 620px;
+  }
+
+  main {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 32px 24px 60px;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  @media (max-width: 760px) {
+    main { grid-template-columns: 1fr; }
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 24px;
+  }
+
+  .panel h2 {
+    margin-top: 0;
+    font-size: 1.05rem;
+    font-weight: 650;
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 16px;
+  }
+
+  @media (max-width: 480px) {
+    .field-grid { grid-template-columns: 1fr; }
+  }
+
+  label {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    margin-bottom: 5px;
+  }
+
+  input {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-size: 0.92rem;
+    color: var(--ink);
+    background: #fcfdfd;
+  }
+
+  input:focus {
+    outline: 2px solid var(--teal);
+    outline-offset: 1px;
+    border-color: var(--teal);
+  }
+
+  button {
+    margin-top: 20px;
+    width: 100%;
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  button:hover { background: var(--teal-deep); }
+
+  .result-panel {
+    position: sticky;
+    top: 20px;
+  }
+
+  .result-empty {
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+
+  .result-box {
+    border-radius: 8px;
+    padding: 18px;
+    margin-top: 6px;
+  }
+
+  .result-box.risk { background: var(--risk-bg); border: 1px solid #eecdbd; }
+  .result-box.safe { background: var(--safe-bg); border: 1px solid #c7e5d4; }
+
+  .result-box .verdict {
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 4px;
+  }
+
+  .result-box.risk .verdict { color: var(--risk); }
+  .result-box.safe .verdict { color: var(--safe); }
+
+  .result-box .prob {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+
+  .error-box {
+    background: var(--risk-bg);
+    border: 1px solid #eecdbd;
+    color: var(--risk);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 0.88rem;
+    margin-bottom: 16px;
+  }
+
+  .meta-note {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+
+  .disclaimer {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    background: #f1f4f5;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Cardiac Risk Screener</h1>
+    <p>Enter clinical measurements below to estimate heart disease risk using a machine learning model trained on the UCI Cleveland Heart Disease dataset.</p>
+  </div>
+</header>
+
+<main>
+  <div class="panel">
+    <h2>Patient Measurements</h2>
+
+    {% if error %}
+    <div class="error-box">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+      <div class="field-grid">
+        {% for key, label, placeholder in fields %}
+        <div>
+          <label for="{{ key }}">{{ label }}</label>
+          <input type="number" step="any" id="{{ key }}" name="{{ key }}"
+                 placeholder="{{ placeholder }}"
+                 value="{{ form_values.get(key, '') }}" required>
+        </div>
+        {% endfor %}
+      </div>
+      <button type="submit">Assess Risk</button>
+    </form>
+  </div>
+
+  <div class="panel result-panel">
+    <h2>Result</h2>
+
+    {% if result %}
+    <div class="result-box {{ 'risk' if 'At Risk' in result else 'safe' }}">
+      <div class="verdict">{{ result }}</div>
+      <div class="prob">Model confidence: {{ probability }}%</div>
+    </div>
+    {% else %}
+    <p class="result-empty">Fill in the form and click "Assess Risk" to see a prediction here.</p>
+    {% endif %}
+
+    <div class="meta-note">
+      Model: {{ model_name }} · Test accuracy: {{ model_acc }}%<br>
+      Trained on 303 patient records (UCI Cleveland Heart Disease dataset).
+    </div>
+
+    <div class="disclaimer">
+      This tool is a student machine learning project for educational and portfolio purposes only. It is not a medical device and must not be used for actual diagnosis or treatment decisions. Always consult a qualified healthcare professional.
+    </div>
+  </div>
+</main>
+
+</body>
+</html>
