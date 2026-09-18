@@ -1,0 +1,50 @@
+{
+  "best_model": "Random Forest",
+  "results": {
+    "Logistic Regression": {
+      "test_accuracy": 0.8032786885245902,
+      "test_auc": 0.8690476190476191,
+      "cv_mean": 0.8308673469387754,
+      "cv_std": 0.04093078481123406
+    },
+    "Random Forest": {
+      "test_accuracy": 0.819672131147541,
+      "test_auc": 0.9123376623376622,
+      "cv_mean": 0.8349489795918368,
+      "cv_std": 0.042554745156365856
+    },
+    "SVM": {
+      "test_accuracy": 0.819672131147541,
+      "test_auc": 0.8831168831168832,
+      "cv_mean": 0.8019557823129251,
+      "cv_std": 0.03875293978509415
+    },
+    "KNN": {
+      "test_accuracy": 0.819672131147541,
+      "test_auc": 0.8836580086580086,
+      "cv_mean": 0.8101190476190476,
+      "cv_std": 0.034307404595631974
+    },
+    "Decision Tree": {
+      "test_accuracy": 0.7868852459016393,
+      "test_auc": 0.8176406926406926,
+      "cv_mean": 0.7316326530612246,
+      "cv_std": 0.03268825165825931
+    }
+  },
+  "feature_order": [
+    "age",
+    "sex",
+    "cp",
+    "trestbps",
+    "chol",
+    "fbs",
+    "restecg",
+    "thalach",
+    "exang",
+    "oldpeak",
+    "slope",
+    "ca",
+    "thal"
+  ]
+}
