@@ -71,4 +71,4 @@ This is a student machine learning project for educational and portfolio purpose
 - Add input range validation (e.g. flag biologically implausible values) beyond basic type-checking
 
 ---
-*Author: Anjali Kumari — B.E. Electrical Engineering, UIT Burdwan*
+
